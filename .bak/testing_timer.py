@@ -1,0 +1,126 @@
+#! /usr/bin/env python
+from time import sleep
+from os import system
+
+def format_section(x):
+	if x < 10:
+		x = '0'+ str(x)
+	else:
+		x = str(x)
+	return x
+
+def countdown_looper(y, arr):
+	arr = []
+	for i in range(y):
+		x = y - i
+		arr.append(format_section(x))
+		arr[0]= '00'
+		print x
+	return arr
+
+
+def minute_countdown(minutes):
+	arr = []
+	return countdown_looper(minutes,arr)
+
+def second_countdown(minutes):
+	arr = ['00']
+	sec = (minutes*60)
+	arr = countdown_looper(sec,arr)
+
+	print arr
+	return arr
+
+def hundreth_sec_coundown():
+	hundreth_sec = 100
+	arr = []
+	arr = countdown_looper(hundreth_sec, arr)
+	arr[0] = '00'
+	print arr
+	return arr
+
+def make_timer(minutes):
+	mins = minute_countdown(minutes)
+	sec = second_countdown(mins)
+	hundreths = hundreth_sec_coundown()
+	
+	print mins
+	print sec
+	print hundreths
+
+def less_than_ten(x):
+	if x < 10:
+		return True
+	else:
+		return False
+
+def to_seconds(mins):
+	return round(60+((mins - round(mins,0))*60))%60
+
+def to_hundreth_sec(seconds):
+		return float(seconds)*.01
+
+def timer(minutes):
+	arr = []
+	seconds = minutes * 60
+	colon_index = 10	
+	for i in range(seconds):
+		_min = (seconds - i)/60
+		
+		remaining_min = int(_min)
+		remaining_sec = int(to_seconds(_min)-i)%60
+		print "rem sec", remaining_sec
+		#hundreth_sec = int(to_hundreth_sec(remaining_sec))*100
+		hundreth_sec = 100
+		for j in range(hundreth_sec):
+			
+			#_seconds = (hundreth_sec -j)%60
+			#remaining_hundreth_sec = remaining_sec-j#*100)%60
+		
+			#remaining_total = str(remaining_min)+str(remaining_sec)+str(remaining_hundreth_sec)
+			#print 'rem total', remaining_total
+			print 'rem hundreth', hundreth_sec 
+# The if else statements below take the current countdown time and format it as <xx:xx>. 
+# This function returns a list of lists with countdown sublist properly mapped to the png list in matrix_control.py
+		if less_than_ten(remaining_min) == True and less_than_ten(remaining_sec) == True:
+			countdown = '0'+str(remaining_min)+':0'+str(remaining_sec)+':0'+str(remaining_sec)
+
+			x = '0'+str(remaining_min)+'0'+str(remaining_sec)+'0'+str(remaining_sec)
+			digits = [int(i) for i in x]
+
+		elif less_than_ten(remaining_min) == True and less_than_ten(remaining_sec)== False:
+			countdown = '0'+str(remaining_min)+':'+str(remaining_sec)
+			x = '0'+str(remaining_min)+str(remaining_sec)
+			digits = [int(i) for i in x]
+
+		elif less_than_ten(remaining_min) == False and less_than_ten(remaining_sec) == True:
+			countdown = str(remaining_min)+':0'+str(remaining_sec)	
+			x = str(remaining_min)+'0'+str(remaining_sec)	
+			digits = [int(i) for i in x]
+
+		elif less_than_ten(remaining_min) == False and less_than_ten(remaining_sec) == False:
+			countdown = str(remaining_min)+':'+str(remaining_sec)
+			x = str(remaining_min)+str(remaining_sec)
+			digits = [int(i) for i in x]
+		
+		digits.insert(2,colon_index)
+		arr.append(digits)
+		#print digits
+		digits = []
+	arr.append([0,0,colon_index,0,0])
+	return arr
+
+def get_current(minutes):
+	arr = timer(minutes)
+	print arr[-1]		
+	return arr[-1]	
+
+def map_to_png(timer_arr, png_arr):
+	return
+#second_countdown(1)
+#hundreth_sec_coundown()
+#minute_countdown(2)
+make_timer(1)
+#timer(10)
+#timer(15)
+#get_current(15)
