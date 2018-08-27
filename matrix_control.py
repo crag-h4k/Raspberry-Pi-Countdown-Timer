@@ -1,14 +1,14 @@
 #!/usr/bin/python
+from datetime import datetime
+from sys import argv
+from time import sleep
+
 from PIL import Image
 from PIL import ImageDraw
-from time import sleep
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
-from sys import argv
-
 #local modules
 from timer import timer, test_timer
 from led_nums import PNG_4x7, PNG_8x13, PNG_8x13_ZERO_DASHED
-
 
 # finds the best place to print to the matrix
 def orient_image(mat_cols, mat_rows, char_width, char_height, n_chars,n_lines):	
@@ -22,13 +22,7 @@ def orient_image(mat_cols, mat_rows, char_width, char_height, n_chars,n_lines):
 	#print arr
 	return arr
 
-def to_matrix(*minutes):
-	if not minutes:
-		minutes = 15
-	# How fast for testing
-	sleep_i = .00001
-
-	
+def to_matrix(_minutes):
 	# matrix options set here
 	options = RGBMatrixOptions()	
 	options.rows = 32
@@ -53,91 +47,90 @@ def to_matrix(*minutes):
 	# image files found in respective directories
 	png = PNG_8x13
 	# create the countdown timer here
-	T = test_timer()
-	#_T = timer(1)
-	#print(_T)
-	#try:
+	
 # First for loop takes the initial list of lists and starts itering through
-	#	print 'countdown timer started'
-
-	while 1:		
-		for i in T:
+	#print(T)
+        #timer_flag = True
+	while True:		
+	    T = test_timer(_minutes)
+	    for i in T:
+                #print('here')
 # Second for loop takes each individual list itme and iters through, printing to the matrix
-			#print(i)
-			# this updates later according to the offset
-			x_matrix_pos = O[0]
-			# with a single row of chars this wont change
-			y_matrix_pos = O[1]
-			# this is how far away the next char will print from the previous
-			x_matrix_offset = O[2]
+                #print(i)
+                # this updates later according to the offset
+                x_matrix_pos = O[0]
+                # with a single row of chars this wont change
+                y_matrix_pos = O[1]
+                # this is how far away the next char will print from the previous
+                x_matrix_offset = O[2]
+                #print(i)
+                minutes = (i[0],i[1])
+                seconds = (i[2],i[3])
+                hundreths = (i[4],i[5])
+                
+                for i in minutes:
+                    #sleep(.01)
+                        #x_matrix_pos = x_matrix_offset
+                    image = Image.open("%s" % png[int(minutes[0])])
+                    image.load()
+                    matrix.SetImage(image.convert('RGB'),x_matrix_pos, y_matrix_pos)
+                    
+                    x_matrix_pos += x_matrix_offset
+                    #print x_matrix_pos
+                    image = Image.open("%s" % png[int(minutes[1])])
+                    image.load()
+                    matrix.SetImage(image.convert('RGB'),x_matrix_pos, y_matrix_pos)
 
-			minutes = i[0]+i[1]
-			seconds = i[2]+i[3]
-			hundreths = i[4]+i[5]
-			
-			for mins in minutes:
-				#x_matrix_pos = x_matrix_offset
-				image = Image.open("%s" % png[int(minutes[0])])
-				image.load()
-				matrix.SetImage(image.convert('RGB'),x_matrix_pos, y_matrix_pos)
-				
-				x_matrix_pos += x_matrix_offset
-				#print x_matrix_pos
-				image = Image.open("%s" % png[int(minutes[1])])
-				image.load()
-				matrix.SetImage(image.convert('RGB'),x_matrix_pos, y_matrix_pos)
+                    #colon
+                    x_matrix_pos += x_matrix_offset
+                    image = Image.open("%s" % png[10])
+                    image.load()
+                    matrix.SetImage(image.convert('RGB'),x_matrix_pos, y_matrix_pos)
+                    #for secs in seconds:
 
-				#colon
-				x_matrix_pos += x_matrix_offset
-				image = Image.open("%s" % png[10])
-				image.load()
-				matrix.SetImage(image.convert('RGB'),x_matrix_pos, y_matrix_pos)
-				for secs in seconds:
+                    x_matrix_pos += x_matrix_offset
+                    image = Image.open("%s" % png[int(seconds[0])])
+                    image.load()
+                    matrix.SetImage(image.convert('RGB'),x_matrix_pos, y_matrix_pos)
 
-					x_matrix_pos += x_matrix_offset
-					image = Image.open("%s" % png[int(seconds[0])])
-					image.load()
-					matrix.SetImage(image.convert('RGB'),x_matrix_pos, y_matrix_pos)
+                    x_matrix_pos += x_matrix_offset
+                    #image = Image.open("%s" % png[int(seconds[1])])
+                    image = Image.open("%s" % png[int(seconds[1])])
+                    image.load()
+                    matrix.SetImage(image.convert('RGB'),x_matrix_pos, y_matrix_pos)
+                    #period
+                    x_matrix_pos += x_matrix_offset
+                    image = Image.open("./8x13/period.png")
+                    image.load()
+                    matrix.SetImage(image.convert('RGB'),x_matrix_pos, y_matrix_pos)
+                    #for hunds in hundreths:
 
-					x_matrix_pos += x_matrix_offset
-					image = Image.open("%s" % png[int(seconds[1])])
-					image.load()
-					matrix.SetImage(image.convert('RGB'),x_matrix_pos, y_matrix_pos)
-					#period
-					x_matrix_pos += x_matrix_offset
-					image = Image.open("./8x13/period.png")
-					image.load()
-					matrix.SetImage(image.convert('RGB'),x_matrix_pos, y_matrix_pos)
-					#sleep(.98)
-					for hunds in hundreths:
+                    x_matrix_pos += x_matrix_offset
+                    image = Image.open("%s" % png[int(hundreths[0])])
+                    image.load()
+                    matrix.SetImage(image.convert('RGB'),x_matrix_pos, y_matrix_pos)
 
-						x_matrix_pos += x_matrix_offset
-						image = Image.open("%s" % png[int(hundreths[0])])
-						image.load()
-						matrix.SetImage(image.convert('RGB'),x_matrix_pos, y_matrix_pos)
-
-						x_matrix_pos += x_matrix_offset
-						image = Image.open("%s" % png[int(hundreths[1])])
-						image.load()
-						matrix.SetImage(image.convert('RGB'),x_matrix_pos, y_matrix_pos)
-						print(minutes[0],minutes[1],seconds[0],seconds[1],hundreths[0],hundreths[1])
-						#sleep(sleep_i)
-
-		# display zero status at the end of the timer
-		print "countdown timer finished"
-		while 1:
+                    x_matrix_pos += x_matrix_offset
+                    image = Image.open("%s" % png[int(hundreths[1])])
+                    image.load()
+                    matrix.SetImage(image.convert('RGB'),x_matrix_pos, y_matrix_pos)
+                    #print(minutes[0],minutes[1],seconds[0],seconds[1],hundreths[0],hundreths[1])
+                    sleep(.0002)
+	        #timer_flag == False
+            print(datetime.now())
+	while 1:
 			# last list item in timer
-			zero_status = T[-1]
+		zero_status = T[-1]
 
-			x_matrix_pos = O[0]
-			y_matrix_pos = O[1]
-			x_matrix_offset = O[2]
+		x_matrix_pos = O[0]
+		y_matrix_pos = O[1]
+		x_matrix_offset = O[2]
 			
-			for i in zero_status:
-				image = Image.open("%s" % png[i])
-				image.load()
-				matrix.SetImage(image.convert('RGB'),x_matrix_pos, y_matrix_pos)
-				x_matrix_pos += x_matrix_offset
+		for i in zero_status:
+		    image = Image.open("%s" % png[i])
+		    image.load()
+		    matrix.SetImage(image.convert('RGB'),x_matrix_pos, y_matrix_pos)
+		    x_matrix_pos += x_matrix_offset
 
 	#except Exception as e:
 	#	matrix.Clear()
@@ -153,6 +146,11 @@ def validate_input(*args):
 	except:
 		return 15
 
-#x = validate_input()
-to_matrix()
+x = validate_input()
+#15:00 min timer finished 00:58 early
+#05:00 min timer finished 00:49 early
+#05:00 min timer finished 00:35 early
+#05:00 min timer finished 00:33 early
+print(datetime.now())
+to_matrix(x)
 

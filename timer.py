@@ -23,9 +23,7 @@ def less_than_ten(x):
 def to_seconds(mins):
 	return round(60+((mins - round(mins,0))*60))%60
 
-def test_timer(*mins):
-	if not mins:
-		mins = 15
+def test_timer(mins):
 	hundreth = make_num(100)
 	seconds = make_num(60)
 	minutes = make_num(mins)
@@ -37,12 +35,8 @@ def test_timer(*mins):
 			_second = seconds[j]
 			for k in range(len(hundreth)):
 				_hundreth = hundreth[k]
-				#countdown = _minute + ':' + _second + '.' + _hundreth
 				countdown = _minute + _second +  _hundreth
 				_timer.append(countdown)
-	#for i in _timer:
-	#	print(i)
-	#	sleep(.001)
 	return _timer
 
 def timer(minutes):
@@ -83,15 +77,10 @@ def timer(minutes):
 	arr.append([0,0,colon_index,0,0])
 	return arr
 
-def get_current(minutes):
-	arr = timer(minutes)
-	print arr[-1]		
-	return arr[-1]	
-
-def map_to_png(timer_arr, png_arr):
-	return
+#def map_to_png(timer_arr, png_arr):
+#	return
 
 #timer(1)
 #timer(15)
 #get_current(15)
-test_timer()
+#test_timer()
