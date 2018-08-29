@@ -115,7 +115,7 @@ def to_matrix(_minutes):
                     image.load()
                     matrix.SetImage(image.convert('RGB'),x_matrix_pos, y_matrix_pos)
                     #print(minutes[0],minutes[1],seconds[0],seconds[1],hundreths[0],hundreths[1])
-                    sleep(.0002)
+                    sleep(.0001693405867)
 	        #timer_flag == False
             print(datetime.now())
 	while 1:
